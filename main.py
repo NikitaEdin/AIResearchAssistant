@@ -4,7 +4,7 @@ from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
 from langchain.agents import create_tool_calling_agent, AgentExecutor
-from tools import search_tool, wiki_tool
+from tools import search_tool, wiki_tool, save_tool
 
 # Load environment variables from .env file
 load_dotenv()
@@ -42,7 +42,7 @@ prompt = ChatPromptTemplate.from_messages(
 ).partial(format_instructions=parser.get_format_instructions())
     
 # Define tools to be used by agent
-tools = [search_tool, wiki_tool]
+tools = [search_tool, wiki_tool, save_tool]
 
 
 # Create agent with LLM and prompt
