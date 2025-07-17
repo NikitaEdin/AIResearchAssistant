@@ -4,7 +4,7 @@ from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
 from langchain.agents import create_tool_calling_agent, AgentExecutor
-from tools import search_tool, wiki_tool, save_tool
+from tools import search_tool, wiki_tool, save_tool, arxiv_tool
 
 # Load environment variables from .env file
 load_dotenv()
@@ -18,8 +18,9 @@ class ResearchResponse(BaseModel):
     
 # Initialise LLM with Claude 4
 llm = ChatAnthropic(model="claude-opus-4-20250514",
-        max_tokens=1000,
-        temperature=1)
+        max_tokens=250,
+        # temp of 1 = more randomness and potentially longer responses.
+        temperature=0.3)
 
 
 parser = PydanticOutputParser(pydantic_object=ResearchResponse)
@@ -42,7 +43,7 @@ prompt = ChatPromptTemplate.from_messages(
 ).partial(format_instructions=parser.get_format_instructions())
     
 # Define tools to be used by agent
-tools = [search_tool, wiki_tool, save_tool]
+tools = [search_tool, wiki_tool, arxiv_tool, save_tool]
 
 
 # Create agent with LLM and prompt
